@@ -1,0 +1,51 @@
+body {
+    font-family: "Segoe UI", "Lucida Grande", Tahoma, sans-serif;
+    font-size: 14px;
+}
+
+ul, li {
+    padding: 0;
+    margin: 0;
+}
+
+
+img {
+    border: 0;
+    vertical-align: top;
+}
+
+#house-list {
+    font-size: 1.1em;
+}
+
+.item {
+    width: 30em;
+    overflow: hidden;
+    cursor: pointer;
+}
+
+.item h3 {
+    color: #009de8;
+    font-size: 1.3em;
+}
+
+.item h3:hover {
+    text-decoration: underline;
+}
+
+.image-panel {
+    float: left;
+    width: 12.4em;
+}
+
+.image-panel img {
+    width: 12.4em;
+    height: 9.3em;
+}
+
+.info-panel {
+    margin-left: 12.5em;
+    padding-left: 1em;
+    padding-top: 1em;
+}
+
