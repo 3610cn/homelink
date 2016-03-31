@@ -35,7 +35,7 @@ function hideStatus() {
 function getHouseList(callback) {
     showStatus('Loading...');
     $.getJSON(
-        'http://user.lianjia.com/site/housedata/?filter=1&perPage=10000',
+        INVALID_HOUSE_LIST_URL,
         function (response) {
             var data = response.data;
             callback(data);

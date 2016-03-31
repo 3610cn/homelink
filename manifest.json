@@ -9,7 +9,7 @@
     "default_title": "Home Link"
   },
   "background":{
-    "scripts": ["util/zepto.min.js", "eventPage.js"],
+    "scripts": ["const.js", "util/zepto.min.js", "eventPage.js"],
     "persistent": false
   },
   "permissions": [

@@ -33,7 +33,7 @@ function hideUnread() {
 setInterval(
     function poll() {
         $.getJSON(
-            'http://user.lianjia.com/site/housedata/?p=10&filter=1',
+            INVALID_HOUSE_LIST_URL,
             function (response) {
                 var data = response.data;
                 var num = data.list && data.list.length;
