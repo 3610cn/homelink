@@ -60,6 +60,11 @@ var ITEM_TPL = [
 ].join('');
 
 function renderHouseList(data) {
+    data.list = data.list.filter(
+        function (item) {
+            return !item.valid;
+        }
+    );
     $('#house-list').html(
         $.map(
             data.list,
