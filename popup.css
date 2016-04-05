@@ -14,14 +14,44 @@ img {
     vertical-align: top;
 }
 
-#house-list {
+.tab {
+    min-width: 140px;
+    font-size: 1.2em;
+}
+
+.tab li {
+    display: inline-block;
+    cursor: pointer;
+}
+
+.tab li.active {
+    color: #39f;
+    border-bottom: 1px solid #39f;
+    cursor: inherit;
+}
+
+.list {
     font-size: 1.1em;
+    min-width: 20em;
+}
+
+.summary {
+    margin-top: 1em;
+    margin-bottom: 0;
 }
 
 .item {
     width: 30em;
     overflow: hidden;
     cursor: pointer;
+}
+
+.item-sell .operation {
+    display: none;
+}
+
+.item-read {
+    border: 1px solid red;
 }
 
 .item h3 {

@@ -34,3 +34,25 @@ util.format = function (template, data, pre) {
         }
     );
 };
+
+util.getJSON = function (url) {
+    return new Promise(
+        function (resolve, reject) {
+            $.getJSON(
+                url,
+                function (response) {
+                    resolve(response);
+                }
+            );
+        }
+    );
+};
+
+util.getJSONs = function (urlList) {
+    var promises = urlList.map(
+        function (url) {
+            return util.getJSON(url);
+        }
+    );
+    return Promise.all(promises);
+};
