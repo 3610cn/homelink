@@ -1,0 +1,15 @@
+{
+  "name": "etpl",
+  "homepage": "https://github.com/ecomfe/etpl",
+  "version": "3.1.0",
+  "_release": "3.1.0",
+  "_resolution": {
+    "type": "version",
+    "tag": "3.1.0",
+    "commit": "d28dc1983cd9f6021f73fae374894c2c99847213"
+  },
+  "_source": "https://github.com/ecomfe/etpl.git",
+  "_target": "^3.1.0",
+  "_originalSource": "https://github.com/ecomfe/etpl.git",
+  "_direct": true
+}
