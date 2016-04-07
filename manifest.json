@@ -22,5 +22,6 @@
         "http://user.lianjia.com/",
         "http://sh.lianjia.com/",
         "http://nj.lianjia.com/"
-    ]
+    ],
+    "content_security_policy": "script-src 'self' 'unsafe-eval'; object-src 'self'"
 }

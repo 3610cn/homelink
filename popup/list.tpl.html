@@ -1,0 +1,17 @@
+<!-- target: houseList -->
+<p class="summary">合计 - ${list.length}个房源</p>
+<!-- for: ${list} as ${item}, ${index} -->
+<li class="item ${item.customClass} item-${item.type}" href="${item.viewUrl}" id="${item.houseId}">
+   <h3>${item.title} (${item.floorStat})</h3>
+   <div class="image-panel">
+      <img src="${item.imgSrc}">
+   </div>
+   <div class="info-panel">
+      <span class="community">${item.communityName}</span>
+      <span class="room">${item.roomNum}</span>
+      <span class="square">${item.square}m</span>
+      <p class="price">${item.price}w | ${item.unitPrice} yuan/m</p>
+      <p class="operation"><button class="followbtn">关注</button></p>
+   </div>
+</li>
+<!-- /for -->

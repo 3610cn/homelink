@@ -7,6 +7,9 @@
 define(
     function (require) {
 
+        require('etpl/tpl!popup/list.tpl.html');
+
+        var etpl = require('etpl');
         var $ = require('zepto');
         var util = require('util');
         var config = require('config');
@@ -54,26 +57,6 @@ define(
             );
         }
 
-        var SUMMARY_TPL = [
-            '<p class="summary">合计 - ${count}个房源</p>'
-        ].join('');
-
-        var ITEM_TPL = [
-            '<li class="item ${customClass} item-${type}" href="${viewUrl}" id="${houseId}">',
-            '   <h3>${title} (${floorStat})</h3>',
-            '   <div class="image-panel">',
-            '      <img src="${imgSrc}">',
-            '   </div>',
-            '   <div class="info-panel">',
-            '      <span class="community">${communityName}</span>',
-            '      <span class="room">${roomNum}</span>',
-            '      <span class="square">${square}m</span>',
-            '      <p class="price">${price}w | ${unitPrice} yuan/m</p>',
-            '      <p class="operation"><button class="followbtn">关注</button></p>',
-            '   </div>',
-            '</li>'
-        ].join('');
-
         var RENDER_LIST = [
             {
                 domId: '#house-list',
@@ -98,17 +81,17 @@ define(
             if (renderConfig.filter) {
                 list = data.list.filter(renderConfig.filter);
             }
-            var domId = renderConfig.domId;
-            $(domId).html(util.format(SUMMARY_TPL, {count: list.length}));
-            $(domId).append(
-                $.map(
-                    list,
-                    function (item, index) {
-                        item.imgSrc = item.imgSrc || config.DEFAULT_LIST_PIC;
-                        return util.format(ITEM_TPL, item);
-                    }
-                ).join('')
+            list.forEach(
+                function (item, index) {
+                    item.imgSrc = item.imgSrc || config.DEFAULT_LIST_PIC;
+                }
             );
+            var domId = renderConfig.domId;
+            var listRenderer = etpl.getRenderer('houseList');
+            var html = listRenderer({list: list});
+            $(domId).html(html);
+
+            // 事件处理
             $(renderConfig.domId).on(
                 'click',
                 '.item',
@@ -166,7 +149,7 @@ define(
             result.unitPrice = data.unit_price;
             result.type = 'all';
             result.cityCode = getCityCode(data.house_code);
-            result.viewUrl = util.format(DETAIL_URL, result);
+            result.viewUrl = util.format(config.DETAIL_URL, result);
             return result;
         }
 

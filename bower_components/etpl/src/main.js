@@ -961,8 +961,8 @@
             }
         }
         else if (this.engine.options.missTarget === 'error') {
-            throw new Error('[ETPL_MISS_TARGET]' + masterName 
-                + ', when extended by ' 
+            throw new Error('[ETPL_MISS_TARGET]' + masterName
+                + ', when extended by '
                 + (this.target ? this.target.name : this.name)
             );
         }
@@ -996,7 +996,7 @@
                 if (child instanceof ImportCommand) {
                     var target = engine.targets[child.name];
                     if (!target && engine.options.missTarget === 'error') {
-                        throw new Error('[ETPL_MISS_TARGET]' + child.name 
+                        throw new Error('[ETPL_MISS_TARGET]' + child.name
                             + ', when imported by ' + targetName);
                     }
 
