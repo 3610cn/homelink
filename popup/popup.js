@@ -168,6 +168,8 @@ define(
             getFocusHouseList(
                 function(data) {
                     focusIds = data.list.map(item => item.houseId);
+                    // 强制成已关注，和普通列表区分
+                    data.list.forEach(item => {item.isFaved = true;})
                     renderHouseList(data);
                 }
             );
@@ -185,7 +187,13 @@ define(
                             return focusIds.indexOf(item.house_code) === -1
                         }
                     );
-                    houses = houses.map(item => convertData(item));
+                    houses = houses.map(
+                        item => {
+                            var item = convertData(item);
+                            item.isFaved = false;
+                            return item;
+                        }
+                    );
                     renderList({list: houses}, {domId: '#all'});
                 }
             );

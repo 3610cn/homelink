@@ -2,6 +2,8 @@ define(
     function (require) {
 
         var util = require('underscore');
+        var config = require('./config');
+        var $ = require('zepto');
 
         /**
          * 字符串格式化
@@ -36,6 +38,36 @@ define(
                 }
             );
         };
+
+        var $getJSON = $.getJSON;
+
+        /**
+         * 包装了zepto的$.getJSON,目的是增加缓存机制
+         */
+        $.getJSON = function (url, callback) {
+            var key = url.replace(/[^\w]/g, '-');
+            var cache = localStorage.getItem(key);
+            if (cache) {
+                callback(JSON.parse(cache));
+            }
+            else {
+                $getJSON(
+                    url,
+                    function (response) {
+                        localStorage.setItem(key, JSON.stringify(response));
+                        // 过期后删除缓存
+                        setTimeout(
+                            function(){
+                                localStorage.removeItem(key);
+                            },
+                            config.CACHE_MAX_AGE
+                        );
+                        callback(response);
+                    }
+                );
+            }
+        };
+
 
         util.getJSON = function (url) {
             return new Promise(

@@ -1,5 +1,9 @@
 var config = {
+    // 请求缓存时间
+    CACHE_MAX_AGE: 300 * 1000,
+    // 所有关注房源
     INVALID_HOUSE_LIST_URL: 'http://user.lianjia.com/site/housedata/?filter=1&p=1&perPage=300',
+    // 默认图片地址
     DEFAULT_LIST_PIC: 'http://static1.ljcdn.com/h5/images/default/default_lianjia_small.png?_v=20160330192650',
     // 关注小区列表
     COMMUNITY_FAV_LIST: 'http://user.lianjia.com/site/communitydata/?perPage=100',

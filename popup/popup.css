@@ -46,10 +46,6 @@ img {
     cursor: pointer;
 }
 
-.item-sell .operation {
-    display: none;
-}
-
 .item-read {
     border: 1px solid red;
 }
@@ -77,5 +73,17 @@ img {
     margin-left: 12.5em;
     padding-left: 1em;
     padding-top: 1em;
+}
+
+.operation button {
+    display: inline-block;
+    width: 98px;
+    height: 34px;
+    background-color: #ffffff;
+    border-radius: 2px;
+    color: #394043;
+    font-size: 14px;
+    text-align: center;
+    cursor: pointer;
 }
 
