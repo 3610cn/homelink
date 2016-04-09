@@ -3,6 +3,8 @@ require.config({
     'paths': {
         'zepto': 'bower_components/zepto/zepto.min',
         'store': 'bower_components/store-js/store.min',
+        'moment': 'bower_components/moment/min/moment.min',
+        'echarts': 'bower_components/echarts/dist/echarts.simple.min'
     },
     'waitSeconds': 10,
     'shim': {

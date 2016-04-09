@@ -13,6 +13,8 @@ define(
         var $ = require('zepto');
         var util = require('util');
         var config = require('config');
+        var m = require('moment');
+        var echarts = require('echarts');
 
         function showStatus(message) {
             $('#status').html(message).show();
@@ -185,9 +187,79 @@ define(
          * 渲染看房记录
          */
         function renderSeeRecordList(records) {
+            var merged = {};
+            records.forEach(
+                function (record) {
+                    record = m(record.see_time || record.lookTimeString, 'YYYY-MM-DD hh:mm:ss');
+                    record = record.format('YYYY-MM-DD');
+                    if (merged[record] > 0) {
+                        merged[record]++;
+                    }
+                    else {
+                        merged[record] = 1;
+                    }
+                }
+            );
+            var newRecords = [];
+            util.each(
+                merged,
+                function (value, key) {
+                    key = m(key, 'YYYY-MM-DD');
+                    newRecords.push(
+                        {
+                            time: key.format('YYYY-MM-DD'),
+                            week: [null, '一', '二', '三', '四', '五', '六', '日'][key.isoWeekday()],
+                            count: value
+                        }
+                    );
+                }
+            );
+            newRecords.sort(
+                function (a, b) {
+                    return m(a.time, 'YYYY-MM-DD')
+                        .isBefore(
+                            m(b.time, 'YYYY-MM-DD')
+                        ) ? -1 : 1;
+                }
+            );
+
+            // 基于准备好的dom，初始化echarts实例
+            var recordChart = echarts.init(document.getElementById('see-records'));
+
+            // 指定图表的配置项和数据
+            var option = {
+                title: {
+                    text: '关注房源看房记录'
+                },
+                tooltip: {
+                    show: true
+                },
+                legend: {
+                    data:['看房记录']
+                },
+                xAxis: {
+                    data: util.pluck(newRecords, 'time')
+                },
+                yAxis: {},
+                series: [{
+                    name: '看房量',
+                    type: 'line',
+                    data: util.pluck(newRecords, 'count')
+                }]
+            };
+            recordChart.showLoading({text: 'Loading'});
+            // 使用刚指定的配置项和数据显示图表。
+            recordChart.setOption(option);
+            recordChart.hideLoading();
+
             var listRenderer = etpl.getRenderer('recordList');
-            var html = listRenderer({list: records});
-            $('#see-records').html(html);
+            var html = listRenderer(
+                {
+                    list: newRecords.reverse(),
+                    count: records.length
+                }
+            );
+            $('#see-records').append(html);
         }
 
         /**

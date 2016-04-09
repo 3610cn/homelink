@@ -32,7 +32,7 @@ img {
 
 .list {
     font-size: 1.1em;
-    min-width: 20em;
+    min-width: 23em;
 }
 
 .summary {
@@ -85,5 +85,10 @@ img {
     font-size: 14px;
     text-align: center;
     cursor: pointer;
+}
+
+.chart {
+    width: 25em;
+    height: 20em;
 }
 

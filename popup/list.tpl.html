@@ -23,10 +23,9 @@
 <!-- /for -->
 
 <!-- target: recordList -->
-<p class="summary">合计 - ${list.length}条看房记录</p>
+<p class="summary">合计 - ${count}条看房记录</p>
 <ul class="see-record-list">
     <!-- for: ${list} as ${item}, ${index} -->
-    <!-- var: seeTime = ${item.see_time} || ${item.lookTimeString} -->
-    <li class="see-record-item">${seeTime}</li>
+    <li class="see-record-item">${item.time} (周${item.week})| ${item.count}</li>
     <!-- /for -->
 </ul>
