@@ -26,6 +26,7 @@
 <p class="summary">合计 - ${list.length}条看房记录</p>
 <ul class="see-record-list">
     <!-- for: ${list} as ${item}, ${index} -->
-    <li class="see-record-item">${item.see_time}</li>
+    <!-- var: seeTime = ${item.see_time} || ${item.lookTimeString} -->
+    <li class="see-record-item">${seeTime}</li>
     <!-- /for -->
 </ul>
