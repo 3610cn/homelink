@@ -4,6 +4,7 @@ define(
         var util = require('underscore');
         var config = require('./config');
         var $ = require('zepto');
+        var store = require('./store');
 
         /**
          * 字符串格式化
@@ -46,22 +47,18 @@ define(
          */
         $.getJSON = function (url, callback) {
             var key = url.replace(/[^\w]/g, '-');
-            var cache = localStorage.getItem(key);
+            var cache = store.get(key);
             if (cache) {
-                callback(JSON.parse(cache));
+                callback(cache);
+                setTimeout(function(){store.remove(key);}, config.CACHE_MAX_AGE);
             }
             else {
                 $getJSON(
                     url,
                     function (response) {
-                        localStorage.setItem(key, JSON.stringify(response));
+                        store.set(key, response);
                         // 过期后删除缓存
-                        setTimeout(
-                            function(){
-                                localStorage.removeItem(key);
-                            },
-                            config.CACHE_MAX_AGE
-                        );
+                        setTimeout(function(){store.remove(key);}, config.CACHE_MAX_AGE);
                         callback(response);
                     }
                 );
@@ -89,6 +86,15 @@ define(
                 }
             );
             return Promise.all(promises);
+        };
+
+        util.openTab = function (url) {
+            chrome.extension.sendMessage(
+                {
+                    action: 'opentab',
+                    url: url
+                }
+            );
         };
 
         return util;

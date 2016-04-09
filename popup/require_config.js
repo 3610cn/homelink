@@ -1,7 +1,8 @@
 require.config({
     'baseUrl': '..',
     'paths': {
-        'zepto': 'bower_components/zepto/zepto.min'
+        'zepto': 'bower_components/zepto/zepto.min',
+        'store': 'bower_components/store-js/store.min',
     },
     'waitSeconds': 10,
     'shim': {

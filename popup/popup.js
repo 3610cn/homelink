@@ -39,20 +39,75 @@ define(
                     }
                     return Promise.resolved();
                 }
+            ).then(
+                function (datas) {
+                    var houses = [];
+                    datas.forEach(
+                        function (arg) {
+                            houses = houses.concat(arg.data.list);
+                        }
+                    );
+                    var filtedHouses = houses.filter(
+                        item => {
+                            return focusIds.indexOf(item.house_code) === -1
+                        }
+                    );
+                    filtedHouses = filtedHouses.map(
+                        item => {
+                            var item = convertData(item);
+                            item.isFaved = false;
+                            return item;
+                        }
+                    );
+                    renderList({list: filtedHouses}, {domId: '#all'});
+
+                    // 获取所有房源id，以获取看房列表
+                    var houseIds = houses.map(item => item.house_code);
+                    getSeeRecordList(houseIds);
+                }
             );
         }
 
         /**
-         * 获取房源列表
+         * 获取关注房源中已下架列表
          */
         function getFocusHouseList(callback) {
-            showStatus('Loading...');
-            $.getJSON(
-                config.INVALID_HOUSE_LIST_URL,
-                function (response) {
+            // 获取关注房源
+            return util.getJSON(config.INVALID_HOUSE_LIST_URL).then(
+                function(response) {
                     var data = response.data;
-                    callback(data);
+                    // 存储所有已关注的id，在所有列表中排除这些已经关注的
+                    focusIds = data.list.map(item => item.houseId);
+                    // 强制成已关注，和普通列表区分
+                    data.list.forEach(item => {item.isFaved = true;})
+                    renderHouseList(data);
                     hideStatus();
+                }
+            );
+        }
+
+        /**
+         * 获取看房记录
+         */
+        function getSeeRecordList(houseIds) {
+            var urls = houseIds.map(
+                houseId => {
+                    var cityName = getCityName(houseId);
+                    return util.format(
+                        cityName === 'sh' ? config.SEE_RECORD_URL_SH : config.SEE_RECORD_URL,
+                        {houseId: houseId}
+                    );
+                }
+            );
+            util.getJSONs(urls).then(
+                function (datas) {
+                    var records = [];
+                    datas.forEach(
+                        function (item) {
+                            records = records.concat(item.data.see_record_list);
+                        }
+                    );
+                    renderSeeRecordList(records);
                 }
             );
         }
@@ -100,11 +155,11 @@ define(
                     var target = e.target;
                     if (target.tagName === 'BUTTON') {
                         var id = $(itemElem).attr('id');
-                        var cityCode = getCityCode(id);
+                        var cityName = getCityName(id);
                         var isFaved = target.innerHTML === '取消关注';
-                        var favUrl = cityCode === 'sh'
+                        var favUrl = cityName === 'sh'
                             ? (isFaved ? config.UNFAV_URL_SH : config.FAV_URL_SH) : config.FAV_URL_NJ;
-                        id = cityCode === 'sh' ? id.slice(2) : id;
+                        id = cityName === 'sh' ? id.slice(2) : id;
                         util.getJSON(
                             util.format(
                                 favUrl,
@@ -121,21 +176,24 @@ define(
                         return;
                     }
                     var url = $(this).attr('href');
-                    openTab(url);
+                    util.openTab(url);
                 }
             );
         }
 
-
-        function openTab(url) {
-            chrome.extension.sendMessage(
-                {
-                    action: 'opentab',
-                    url: url
-                }
-            );
+        /**
+         * 渲染看房记录
+         */
+        function renderSeeRecordList(records) {
+            var listRenderer = etpl.getRenderer('recordList');
+            var html = listRenderer({list: records});
+            $('#see-records').html(html);
         }
 
+        /**
+         * m.lianjia.com和www.lianjia.com的api接口不一样
+         * 这里要适配一下
+         */
         function convertData(data) {
             var result = {};
             result.houseId = data.house_code;
@@ -148,12 +206,12 @@ define(
             result.price = data.price;
             result.unitPrice = data.unit_price;
             result.type = 'all';
-            result.cityCode = getCityCode(data.house_code);
+            result.cityName = getCityName(data.house_code);
             result.viewUrl = util.format(config.DETAIL_URL, result);
             return result;
         }
 
-        function getCityCode(id) {
+        function getCityName(id) {
             if (/^sh/i.test(id)) {
                 return 'sh';
             }
@@ -164,42 +222,15 @@ define(
         var focusIds = [];
 
         $(function() {
-            init();
-            getFocusHouseList(
-                function(data) {
-                    focusIds = data.list.map(item => item.houseId);
-                    // 强制成已关注，和普通列表区分
-                    data.list.forEach(item => {item.isFaved = true;})
-                    renderHouseList(data);
-                }
-            );
-            var houseList = [];
-            getAllHouseList().then(
-                function (datas) {
-                    var houses = [];
-                    datas.forEach(
-                        function (arg) {
-                            houses = houses.concat(arg.data.list);
-                        }
-                    );
-                    houses = houses.filter(
-                        item => {
-                            return focusIds.indexOf(item.house_code) === -1
-                        }
-                    );
-                    houses = houses.map(
-                        item => {
-                            var item = convertData(item);
-                            item.isFaved = false;
-                            return item;
-                        }
-                    );
-                    renderList({list: houses}, {domId: '#all'});
-                }
-            );
+            // 初始化tab切换
+            initTab();
+            showStatus('Loading...');
+            Promise.all(
+                [getAllHouseList(), getFocusHouseList()]
+            ).then(hideStatus);
         });
 
-        function init() {
+        function initTab() {
             $('.tab').on(
                 'click',
                 'li',

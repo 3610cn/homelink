@@ -1,6 +1,6 @@
 var config = {
     // 请求缓存时间
-    CACHE_MAX_AGE: 300 * 1000,
+    CACHE_MAX_AGE: 30 * 1000,
     // 所有关注房源
     INVALID_HOUSE_LIST_URL: 'http://user.lianjia.com/site/housedata/?filter=1&p=1&perPage=300',
     // 默认图片地址
@@ -16,7 +16,10 @@ var config = {
     // 取消关注房源_上海
     UNFAV_URL_SH: 'http://sh.lianjia.com/ershoufang/delMyFavorHouse.json?houseSellId=${house_code}',
     // 详细页面
-    DETAIL_URL: 'http://${cityCode}.lianjia.com/ershoufang/${houseId}.html'
+    DETAIL_URL: 'http://${cityCode}.lianjia.com/ershoufang/${houseId}.html',
+    // 看房记录
+    SEE_RECORD_URL: 'http://m.api.lianjia.com/house/house/seeRecord?house_code=${houseId}&limit_offset=0&access_token=1.008a3b4ee9dad02a7c8b8b3c4bac1948aa&utm_source=&device_id=dc228312a16266a991a0e0e4cc011976',
+    SEE_RECORD_URL_SH: 'http://soa.dooioo.com/api/v4/online/house/ershoufang/seeRecord?access_token=7poanTTBCymmgE0FOn1oKp&client=wap&houseSellId=${houseId}&limit_offset=0'
 };
 
 if (window.define) {
