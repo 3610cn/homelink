@@ -4,7 +4,7 @@ define(
         var util = require('underscore');
         var config = require('./config');
         var $ = require('zepto');
-        var store = require('./store');
+        var store = require('store');
 
         /**
          * 字符串格式化
