@@ -73,7 +73,7 @@ define(
 
             getCommunityFavListUrl: function () {
                 var city = getCity();
-                return city === 'sh' ? config.COMMUNITY_FAV_LIST_SH : COMMUNITY_FAV_LIST;
+                return city === 'sh' ? config.COMMUNITY_FAV_LIST_SH : config.COMMUNITY_FAV_LIST;
             },
 
             getHouseListUrl: function (communityId) {

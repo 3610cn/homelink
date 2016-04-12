@@ -4,7 +4,7 @@ define(
         var store = require('store');
 
         function init() {
-            $('.tab').on(
+            $('.tab:not(.city-list)').on(
                 'click',
                 'li',
                 activeItem
@@ -19,14 +19,16 @@ define(
             $('.city-list').on(
                 'click',
                 'li',
-                activeItem
+                toggleCity
             ).each(
                 function (index, elem) {
-                    var city = store.get('city');
-                    if (!city) {
-                        // 默认搞第一个
-                        toggleCity({target: $(elem).children()[0]});
+                    var origin = store.get('city');
+                    var target = $(elem).children()[0];
+                    if (origin) {
+                        target = $(elem).find('[data-city="' + origin + '"]').get(0);
                     }
+                    // 默认搞第一个
+                    toggleCity({target: target});
                 }
             );
         }
@@ -46,9 +48,11 @@ define(
         }
 
         function toggleCity(e) {
+            activeItem.apply(this, arguments);
+            var origin = store.get('city');
             var target = e.target;
             var city = $(target).data('city');
-            if (city) {
+            if (city !== origin) {
                 store.set('city', city);
                 location.reload();
             }
