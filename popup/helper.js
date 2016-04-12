@@ -108,6 +108,7 @@ define(
                 else if (item.houseSellId) {
                     return convertDooiooHouseData(item);
                 }
+                return item;
             }
 
         };
