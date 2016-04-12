@@ -1,6 +1,7 @@
 define(
     function (require) {
 
+        var m = require('moment');
         var util = require('underscore');
         var config = require('./config');
         var $ = require('zepto');
@@ -49,16 +50,33 @@ define(
             var key = url.replace(/[^\w]/g, '-');
             var cache = store.get(key);
             if (cache) {
-                callback(cache);
-                setTimeout(function(){store.remove(key);}, config.CACHE_MAX_AGE);
+                console.log('[CACHE]', url, '[', cache.time, ']');
+                callback(cache.data);
+                setTimeout(
+                    function(){
+                        store.remove(key);
+                    },
+                    config.CACHE_MAX_AGE
+                );
             }
             else {
                 $getJSON(
                     url,
                     function (response) {
-                        store.set(key, response);
+                        store.set(
+                            key,
+                            {
+                                time: m().format('YYYY-MM-DD hh:mm:ss'),
+                                data: response
+                            }
+                        );
                         // 过期后删除缓存
-                        setTimeout(function(){store.remove(key);}, config.CACHE_MAX_AGE);
+                        setTimeout(
+                            function(){
+                                store.remove(key);
+                            },
+                            config.CACHE_MAX_AGE
+                        );
                         callback(response);
                     }
                 );
