@@ -22,11 +22,12 @@ img {
 .tab li {
     display: inline-block;
     cursor: pointer;
+    border-bottom: 1px solid #000;
 }
 
 .tab li.active {
     color: #39f;
-    border-bottom: 1px solid #39f;
+    border-bottom: none;
     cursor: inherit;
 }
 
