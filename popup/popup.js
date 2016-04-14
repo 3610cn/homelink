@@ -77,9 +77,7 @@ define(
                     );
                     renderList({list: filtedHouses}, {domId: '#all'});
 
-                    // 获取所有房源id，以获取看房列表
-                    var houseIds = houses.map(item => item.houseId);
-                    getSeeRecordList(houseIds);
+                    return houses;
                 }
             );
         }
@@ -107,7 +105,7 @@ define(
                     // 存储所有已关注的id，在所有列表中排除这些已经关注的
                     focusIds = list.map(item => item.houseId);
                     renderFocusHouseList({list: list});
-                    hideStatus();
+                    return list;
                 }
             );
         }
@@ -133,7 +131,7 @@ define(
                             records = records.concat(item.data.see_record_list);
                         }
                     );
-                    renderSeeRecordList(records);
+                    renderSeeRecordList(records, houseIds.length);
                 }
             );
         }
@@ -212,7 +210,7 @@ define(
         /**
          * 渲染看房记录
          */
-        function renderSeeRecordList(records) {
+        function renderSeeRecordList(records, houseCount) {
             var merged = {};
             records.forEach(
                 function (record) {
@@ -315,7 +313,9 @@ define(
             var html = listRenderer(
                 {
                     list: newRecords.reverse(),
-                    count: records.length
+                    count: records.length,
+                    houseCount: houseCount,
+                    avg: (records.length / houseCount).toFixed(2)
                 }
             );
             $('#see-records').append(html);
@@ -330,7 +330,16 @@ define(
             showStatus('Loading...');
             Promise.all(
                 [getAllHouseList(), getFocusHouseList()]
-            ).then(hideStatus);
+            ).then(
+                function (lists) {
+                    hideStatus();
+
+                    // 获取所有房源id，以获取看房列表
+                    var houseIds = util.flatten(lists).map(item => item.houseId);
+                    houseIds = util.uniq(houseIds);
+                    getSeeRecordList(houseIds);
+                }
+            );
         });
 
     }
