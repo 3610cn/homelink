@@ -1,4 +1,13 @@
 <!-- target: houseList -->
+<p class="filter">
+    <select class="room-num-filter">
+        <option value="">全部</option>
+        <option value="1">一房</option>
+        <option value="2">两房</option>
+        <option value="3">三房</option>
+        <option value="4">四房</option>
+    </select>
+</p>
 <p class="summary">合计 - ${list.length}个房源</p>
 <!-- for: ${list} as ${item}, ${index} -->
 <li class="item ${item.customClass} item-${item.type}" href="${item.viewUrl}" id="${item.houseId}">

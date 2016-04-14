@@ -10,7 +10,7 @@ var config = {
     COMMUNITY_FAV_LIST: 'http://user.lianjia.com/site/communitydata/?perPage=100',
     COMMUNITY_FAV_LIST_SH: 'http://user.sh.lianjia.com/favor/getMyFavorPropertyList.json?v=1460454444656&pageNo=1&pageSize=400',
     // 根据小区和城市查询房源列表
-    HOUSE_LIST_TPL: 'http://m.api.lianjia.com/house/ershoufang/searchv2?channel=ershoufang&community_id=${resblockId}&city_id=${cityId}&limit_count=100&limit_offset=0&access_token=1.0000c754c957704eae68d2f40954ed74c2&device_id=6f384597-4820-4700-bd7d-db2be72f51f5&room_count=2&sort=priceTotal+asc&utm_source=',
+    HOUSE_LIST_TPL: 'http://m.api.lianjia.com/house/ershoufang/searchv2?channel=ershoufang&community_id=${resblockId}&city_id=${cityId}&limit_count=100&limit_offset=0&access_token=1.0000c754c957704eae68d2f40954ed74c2&device_id=6f384597-4820-4700-bd7d-db2be72f51f5' + /**'&room_count=2'*/ + '&sort=priceTotal+asc&utm_source=',
     HOUSE_LIST_TPL_SH: 'http://soa.dooioo.com/api/v4/online/house/ershoufang/search?access_token=7poanTTBCymmgE0FOn1oKp&channel=ershoufang&cityCode=sh&client=wap&community_id=${communityId}&limit_count=200&limit_offset=0',
     // 关注房源
     DO_FAV_URL: 'http://nj.lianjia.com/api/SetHouseFav?id=${houseId}&isFav=${tag}',

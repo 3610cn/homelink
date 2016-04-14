@@ -29,7 +29,7 @@ define(
             result.houseId = data.house_code;
             result.title = data.title;
             result.floorStat = data.floor_state;
-            result.imgSrc = data.cover_pic;
+            result.imgSrc = data.cover_pic || config.DEFAULT_LIST_PIC;
             result.communityName = data.community_name;
             result.roomNum = data.blueprint_bedroom_num + '室' + data.blueprint_hall_num + '厅';
             result.square = data.area;
@@ -41,15 +41,14 @@ define(
         }
 
         /**
-         * m.lianjia.com和www.lianjia.com的api接口不一样
-         * 这里要适配一下
+         * 上海接口比较特殊, 这里要适配一下
          */
         function convertDooiooHouseData(data) {
             var result = {};
             result.houseId = data.houseSellId;
             result.title = data.title;
             result.floorStat = data.floorTypeName;
-            result.imgSrc = data.mainPhotoUrl;
+            result.imgSrc = data.mainPhotoUrl || config.DEFAULT_LIST_PIC;
             result.communityName = data.propertyName;
             result.roomNum = data.room + '室' + data.hall + '厅';
             result.square = data.plateName;

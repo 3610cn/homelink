@@ -121,28 +121,24 @@ define(
         function renderHouseList(data) {
             RENDER_LIST.forEach(
                 function (renderConfig) {
-                    renderList(data, renderConfig);
+                    var list = data.list;
+                    if (renderConfig.filter) {
+                        list = list.filter(renderConfig.filter);
+                    }
+                    var domId = renderConfig.domId;
+                    $(domId).data('list', list);
+                    renderList(list, domId);
                 }
             );
         }
 
-        function renderList(data, renderConfig) {
-            var list = data.list;
-            if (renderConfig.filter) {
-                list = data.list.filter(renderConfig.filter);
-            }
-            list.forEach(
-                function (item, index) {
-                    item.imgSrc = item.imgSrc || config.DEFAULT_LIST_PIC;
-                }
-            );
-            var domId = renderConfig.domId;
+        function renderList(list, domId) {
             var listRenderer = etpl.getRenderer('houseList');
             var html = listRenderer({list: list});
             $(domId).html(html);
 
             // 事件处理
-            $(renderConfig.domId).on(
+            $(domId).on(
                 'click',
                 '.item',
                 function (e) {
@@ -176,6 +172,20 @@ define(
                     util.openTab(url);
                 }
             );
+
+            $('.room-num-filter').on(
+                'change',
+                function (e) {
+                    var value = $(this).val();
+                    var $elem = $(this).parents('.list');
+                    var list = $elem.data('list');
+                    if (value) {
+                        list = list.filter(item => parseInt(item.roomNum, 10) === parseInt(value, 10));
+                    }
+                    renderList(list, '#' + $elem.attr('id'));
+                    $elem.find('.room-num-filter').val(value);
+                }
+            )
         }
 
         // 记录已关注房源列表
