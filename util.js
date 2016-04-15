@@ -41,12 +41,10 @@ define(
             );
         };
 
-        var $getJSON = $.getJSON;
-
         /**
          * 包装了zepto的$.getJSON,目的是增加缓存机制
          */
-        $.getJSON = function (url, callback) {
+        function getJSON(url, callback, errorCallback) {
             var key = url.replace(/[^\w]/g, '-');
             var cache = store.get(key);
             if (cache) {
@@ -60,24 +58,30 @@ define(
                 );
             }
             else {
-                $getJSON(
-                    url,
-                    function (response) {
-                        store.set(
-                            key,
-                            {
-                                time: m().format('YYYY-MM-DD hh:mm:ss'),
-                                data: response
-                            }
-                        );
-                        // 过期后删除缓存
-                        setTimeout(
-                            function(){
-                                store.remove(key);
-                            },
-                            config.CACHE_MAX_AGE
-                        );
-                        callback(response);
+                $.ajax(
+                    {
+                        url: url,
+                        dataType: 'json',
+                        success: function(response) {
+                            store.set(
+                                key,
+                                {
+                                    time: m().format('YYYY-MM-DD hh:mm:ss'),
+                                    data: response
+                                }
+                            );
+                            // 过期后删除缓存
+                            setTimeout(
+                                function(){
+                                    store.remove(key);
+                                },
+                                config.CACHE_MAX_AGE
+                            );
+                            callback(response);
+                        },
+                        error: function(response) {
+                            errorCallback(response);
+                        }
                     }
                 );
             }
@@ -87,12 +91,7 @@ define(
         util.getJSON = function (url) {
             return new Promise(
                 function (resolve, reject) {
-                    $.getJSON(
-                        url,
-                        function (response) {
-                            resolve(response);
-                        }
-                    );
+                    getJSON(url, resolve, reject);
                 }
             );
         };

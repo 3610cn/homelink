@@ -188,10 +188,27 @@ define(
             )
         }
 
-        // 记录已关注房源列表
-        $(function() {
+
+        function init() {
             // 初始化tab切换
             require('./tab').init();
+            // 代理所有链接
+            $('body').on(
+                'click',
+                'a',
+                function (e) {
+                    var target = e.target;
+                    var href = target.href;
+                    if (href) {
+                        util.openTab(href);
+                    }
+                }
+            );
+        }
+
+        // 记录已关注房源列表
+        $(function() {
+            init();
             showStatus('Loading...');
             Promise.all(
                 [
@@ -226,6 +243,10 @@ define(
                             ids: houseIds
                         }
                     );
+                }
+            ).catch(
+                function (xhr) {
+                    showStatus('请登陆<a href="http://www.lianjia.com/">链家</a>后使用本插件。');
                 }
             );
         });

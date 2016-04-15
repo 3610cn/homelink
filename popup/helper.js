@@ -29,7 +29,7 @@ define(
             result.houseId = data.house_code;
             result.title = data.title;
             result.floorStat = data.floor_state;
-            result.imgSrc = data.cover_pic || config.DEFAULT_LIST_PIC;
+            result.imgSrc = data.cover_pic;
             result.communityName = data.community_name;
             result.roomNum = data.blueprint_bedroom_num + '室' + data.blueprint_hall_num + '厅';
             result.square = data.area;
@@ -48,7 +48,7 @@ define(
             result.houseId = data.houseSellId;
             result.title = data.title;
             result.floorStat = data.floorTypeName;
-            result.imgSrc = data.mainPhotoUrl || config.DEFAULT_LIST_PIC;
+            result.imgSrc = data.mainPhotoUrl;
             result.communityName = data.propertyName;
             result.roomNum = data.room + '室' + data.hall + '厅';
             result.square = data.plateName;
@@ -107,6 +107,7 @@ define(
                 else if (item.houseSellId) {
                     return convertDooiooHouseData(item);
                 }
+                item.imgSrc = item.imgSrc || config.DEFAULT_LIST_PIC;
                 return item;
             }
 
