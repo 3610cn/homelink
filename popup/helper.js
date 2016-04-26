@@ -102,10 +102,10 @@ define(
 
             convertData: function (item) {
                 if (item.house_code) {
-                    return convertMHouseData(item);
+                    item = convertMHouseData(item);
                 }
                 else if (item.houseSellId) {
-                    return convertDooiooHouseData(item);
+                    item = convertDooiooHouseData(item);
                 }
                 item.imgSrc = item.imgSrc || config.DEFAULT_LIST_PIC;
                 return item;

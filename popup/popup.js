@@ -103,20 +103,26 @@ define(
 
         var RENDER_LIST = [
             {
-                domId: '#latest',
-                // 关注且已失效
-                filter: function (item) {return !item.valid && item.isFaved;}
+                text: '新上房源',
+                filter: function (item) {return !item.isFaved;}
             },
             {
-                domId: '#house-list',
+                text: '关注房源',
                 // 关注且未失效
                 filter: function (item) {return item.valid && item.isFaved;}
             },
             {
-                domId: '#all',
-                filter: function (item) {return !item.isFaved;}
+                text: '下架房源',
+                // 关注且已失效
+                filter: function (item) {return item.valid === false && item.isFaved;}
+            },
+            {
+                text: '成交房源',
+                // 关注且已失效
+                filter: function (item) {return item.valid === 0 && item.isFaved;}
             }
         ];
+
 
         function renderHouseList(data) {
             RENDER_LIST.forEach(
@@ -126,7 +132,7 @@ define(
                         list = list.filter(renderConfig.filter);
                     }
                     var domId = renderConfig.domId;
-                    $(domId).data('list', list);
+                    $('#' + domId).data('list', list);
                     renderList(list, domId);
                 }
             );
@@ -135,10 +141,10 @@ define(
         function renderList(list, domId) {
             var listRenderer = etpl.getRenderer('houseList');
             var html = listRenderer({list: list});
-            $(domId).html(html);
+            $('#' + domId).html(html);
 
             // 事件处理
-            $(domId).on(
+            $('#' + domId).on(
                 'click',
                 '.item',
                 function (e) {
@@ -182,14 +188,32 @@ define(
                     if (value) {
                         list = list.filter(item => parseInt(item.roomNum, 10) === parseInt(value, 10));
                     }
-                    renderList(list, '#' + $elem.attr('id'));
+                    renderList(list, $elem.attr('id'));
                     $elem.find('.room-num-filter').val(value);
                 }
             )
         }
 
 
+        var guid = 0;
         function init() {
+            // 先初始化菜单结构
+            RENDER_LIST.forEach(
+                function (renderConfig) {
+                    renderConfig.domId = renderConfig.domId || ('menu' + guid++);
+                    $('#menu').prepend(
+                        util.format(
+                            '<li for="${domId}">${text}</li> ',
+                            renderConfig
+                        )
+                    ).after(
+                        util.format(
+                            '<ul class="list" id="${domId}"></ul>',
+                            renderConfig
+                        )
+                    );
+                }
+            );
             // 初始化tab切换
             require('./tab').init();
             // 代理所有链接
@@ -239,7 +263,7 @@ define(
                     houseIds = util.uniq(houseIds);
                     require('./seeRecord').render(
                         {
-                            domId: '#see-records',
+                            domId: 'see-records',
                             ids: houseIds
                         }
                     );

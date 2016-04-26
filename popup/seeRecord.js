@@ -30,7 +30,9 @@ define(
                     var records = [];
                     datas.forEach(
                         function (item) {
-                            records = records.concat(item.data.see_record_list);
+                            if (item.data && util.isArray(item.data.see_record_list)) {
+                                records = records.concat(item.data.see_record_list);
+                            }
                         }
                     );
                     return records;
@@ -113,7 +115,7 @@ define(
             );
 
             // 基于准备好的dom，初始化echarts实例
-            var recordChart = echarts.init($(options.domId).get(0));
+            var recordChart = echarts.init($('#' + options.domId).get(0));
 
             // 指定图表的配置项和数据
             var option = {
@@ -150,7 +152,7 @@ define(
                     avg: (list.length / options.count).toFixed(2)
                 }
             );
-            $(options.domId).append(html);
+            $('#' + options.domId).append(html);
         }
 
         return {

@@ -1,6 +1,6 @@
 var config = {
     // 请求缓存时间
-    CACHE_MAX_AGE: 3 * 1000,
+    CACHE_MAX_AGE: 30 * 1000,
     // 所有关注房源
     FAV_HOUSE_LIST_URL: 'http://user.lianjia.com/site/housedata/?filter=1&p=1&perPage=300',
     FAV_HOUSE_LIST_URL_SH: 'http://user.sh.lianjia.com/favor/getMyFavorHouseList.json?v=1460465067829&pageNo=1&pageSize=300',
